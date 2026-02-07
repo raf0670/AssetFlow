@@ -16,6 +16,7 @@
     <HBox alignment="CENTER_LEFT" spacing="15">
         <Label text="AssetFlow" styleClass="h2"/>
         <Region HBox.hgrow="ALWAYS" />
+        <Button text="History" onAction="#onHistoryButtonClick" styleClass="btn, btn-primary"/>
         <Button text="+ Add Expense" fx:id="btnAdd" styleClass="btn, btn-success" onAction="#onAddButtonClick"/>
     </HBox>
 

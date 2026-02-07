@@ -4,9 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+import java.io.IOException;
 
 public class HelloController {
     @FXML
@@ -51,5 +55,24 @@ public class HelloController {
     protected void onAddButtonClick() {
         expenseData.add(new Expense("New Item", 10.00, "Mic"));
         updateTotal();
+    }
+
+    @FXML
+    protected void onHistoryButtonClick() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("history-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 600, 500);
+
+            HistoryController controller = fxmlLoader.getController();
+            controller.setExpenseData(expenseData);
+
+            Stage stage = new Stage();
+            stage.setTitle("Expense History");
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
