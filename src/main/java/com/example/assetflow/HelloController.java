@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class HelloController {
     @FXML
@@ -36,9 +37,9 @@ public class HelloController {
 
         expenseTable.setItems(expenseData);
 
-        expenseData.add(new Expense("Starbucks Coffee", 5.50, "Food"));
-        expenseData.add(new Expense("Groceries", 42.10, "Food"));
-        expenseData.add(new Expense("Netflix Subscription", 15.99, "Entertainment"));
+        expenseData.add(new Expense("Starbucks Coffee", 5.50, "Food", LocalDate.of(2026, 2, 5)));
+        expenseData.add(new Expense("Groceries", 42.10, "Food", LocalDate.of(2026, 1, 29)));
+        expenseData.add(new Expense("Netflix Subscription", 15.99, "Entertainment", LocalDate.of(2025, 12, 28)));
 
         updateTotal();
     }
@@ -53,7 +54,7 @@ public class HelloController {
 
     @FXML
     protected void onAddButtonClick() {
-        expenseData.add(new Expense("New Item", 10.00, "Mic"));
+        expenseData.add(new Expense("New Item", 10.00, "Mic", LocalDate.now()));
         updateTotal();
     }
 

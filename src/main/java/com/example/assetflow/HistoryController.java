@@ -2,6 +2,7 @@ package com.example.assetflow;
 
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -33,14 +34,21 @@ public class HistoryController {
                 if (newDate == null) {
                     return true;
                 }
-                return expense.dateProperty().get().equals(newDate);
+                LocalDate expenseDate = expense.dateProperty().get();
+                return !expenseDate.isBefore(newDate);
             });
         });
     }
 
     public void setExpenseData(ObservableList<Expense> data) {
         this.filteredData = new FilteredList<>(data, p -> true);
-        historyTable.setItems(filteredData);
+        SortedList<Expense> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(historyTable.comparatorProperty());
+        historyTable.setItems(sortedData);
+
+        historyTable.getSortOrder().add(colDate);
+        colDate.setSortType(TableColumn.SortType.DESCENDING);
+        historyTable.sort();
     }
 
     @FXML

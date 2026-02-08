@@ -21,12 +21,6 @@ public class Expense {
         this.date.set(date);
     }
 
-    public Expense(String description, double amount, String category) {
-        this.description.set(description);
-        this.amount.set(amount);
-        this.category.set(category);
-    }
-
     public StringProperty descriptionProperty() {
         return description;
     }
