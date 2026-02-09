@@ -18,15 +18,13 @@
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <HBox alignment="CENTER_LEFT">
-        <Label text="Transaction History" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
-        <Region HBox.hgrow="ALWAYS"/> </HBox>
+    <Label text="Transaction History" styleClass="history-header-label"/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-background-radius: 5; -fx-padding: 10;">
+    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="filter-bar">
         <Label text="Filter by Date:" style="-fx-font-weight: bold;"/>
         <DatePicker fx:id="filterDate" promptText="Pick a date"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Clear Filter" onAction="#clearFilter" style="-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;"/>
+        <Button text="Clear Filter" onAction="#clearFilter" styleClass="btn-clear"/>
     </HBox>
 
     <TableView fx:id="historyTable" VBox.vgrow="ALWAYS">

@@ -5,13 +5,14 @@ import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class HelloController {
     @FXML
@@ -54,8 +55,52 @@ public class HelloController {
 
     @FXML
     protected void onAddButtonClick() {
-        expenseData.add(new Expense("New Item", 10.00, "Mic", LocalDate.now()));
-        updateTotal();
+        Dialog<Expense> dialog = new Dialog<>();
+        dialog.setTitle("Add Expense");
+        dialog.setHeaderText("Add expense details");
+
+        DialogPane dialogPane = dialog.getDialogPane();
+        dialogPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+        dialogPane.getStyleClass().add("my-custom-dialog");
+
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField descriptionField = new TextField();
+        descriptionField.setPromptText("Write your item name");
+        TextField categoryField = new TextField();
+        categoryField.setPromptText("Input your category");
+        TextField amountField = new TextField();
+        amountField.setPromptText("Set your amount");
+
+        grid.add(new Label("Description"), 0, 0);
+        grid.add(descriptionField, 1, 0);
+        grid.add(new Label("Category"), 0, 1);
+        grid.add(categoryField, 1, 1);
+        grid.add(new Label("amount"), 0, 2);
+        grid.add(amountField, 1, 2);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                String desc = descriptionField.getText();
+                String cat = categoryField.getText();
+                double amt = Double.parseDouble(amountField.getText());
+                return new Expense(desc, amt, cat, LocalDate.now());
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(expense -> {
+            expenseData.add(expense);
+            updateTotal();
+        });
     }
 
     @FXML
@@ -63,7 +108,7 @@ public class HelloController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("history-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 500);
-
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
             HistoryController controller = fxmlLoader.getController();
             controller.setExpenseData(expenseData);
 

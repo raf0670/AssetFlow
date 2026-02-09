@@ -20,15 +20,15 @@
         <Label styleClass="h2" text="AssetFlow" />
         <Region HBox.hgrow="ALWAYS" />
         <Button onAction="#onHistoryButtonClick" styleClass="btn, btn-primary" text="History" />
-        <Button fx:id="btnAdd" onAction="#onAddButtonClick" styleClass="btn, btn-success" text="+ Add Expense" />
+        <Button fx:id="btnAdd" onAction="#onAddButtonClick" styleClass="add-button" text="+ Add Expense" />
     </HBox>
 
     <Separator />
 
     <HBox alignment="CENTER" spacing="20">
-        <VBox prefWidth="200" styleClass="panel, panel-info">
+        <VBox prefWidth="200" styleClass="panel">
             <Label styleClass="panel-title" text="Total Spent" />
-            <Label fx:id="lblTotal" style="-fx-font-size: 20px;" text="\$0.00" />
+            <Label fx:id="lblTotal" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="\$0.00" />
         </VBox>
     </HBox>
 

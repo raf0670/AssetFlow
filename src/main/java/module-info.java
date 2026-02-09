@@ -1,6 +1,7 @@
 module com.example.assetflow {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.base;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
