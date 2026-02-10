@@ -32,15 +32,16 @@ public class HelloController {
 
     @FXML
     public void initialize() {
+        loadData();
         colDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
         colAmount.setCellValueFactory(cellData -> cellData.getValue().amountProperty().asObject());
 
         expenseTable.setItems(expenseData);
 
-        expenseData.add(new Expense("Starbucks Coffee", 5.50, "Food", LocalDate.of(2026, 2, 5)));
-        expenseData.add(new Expense("Groceries", 42.10, "Food", LocalDate.of(2026, 1, 29)));
-        expenseData.add(new Expense("Netflix Subscription", 15.99, "Entertainment", LocalDate.of(2025, 12, 28)));
+//        expenseData.add(new Expense("Starbucks Coffee", 5.50, "Food", LocalDate.of(2026, 2, 5)));
+//        expenseData.add(new Expense("Groceries", 42.10, "Food", LocalDate.of(2026, 1, 29)));
+//        expenseData.add(new Expense("Netflix Subscription", 15.99, "Entertainment", LocalDate.of(2025, 12, 28)));
 
         updateTotal();
     }
@@ -101,6 +102,8 @@ public class HelloController {
             expenseData.add(expense);
             updateTotal();
         });
+
+        saveData();
     }
 
     @FXML
@@ -118,6 +121,44 @@ public class HelloController {
             stage.show();
 
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveData() {
+        try (java.io.BufferedWriter w = new java.io.BufferedWriter(new java.io.FileWriter("expenses.csv"))) {
+            for (Expense expense : expenseData) {
+                String line = String.format("%s,%s,%s,%.2f",
+                        expense.dateProperty().get(),
+                        expense.descriptionProperty().get(),
+                        expense.categoryProperty().get(),
+                        expense.amountProperty().get());
+                w.write(line);
+                w.newLine();
+            }
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadData() {
+        java.io.File f = new java.io.File("expenses.csv");
+        if (!f.exists()) return;
+
+        try (java.io.BufferedReader r = new java.io.BufferedReader(new java.io.FileReader(f))) {
+            String l;
+            while ((l = r.readLine()) != null) {
+                String[] parts = l.split(",");
+                if (parts.length == 4) {
+                    LocalDate date = LocalDate.parse(parts[0]);
+                    String desc = parts[1];
+                    String cat = parts[2];
+                    double amt = Double.parseDouble(parts[3]);
+
+                    expenseData.add(new Expense(desc, amt, cat, date));
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

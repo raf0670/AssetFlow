@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="595.0" prefWidth="756.0" spacing="10" style="-fx-background-color: #f4f4f4;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.assetflow.HelloController">
+<VBox prefHeight="669.0" prefWidth="900.0" spacing="10" style="-fx-background-color: #f4f4f4;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.assetflow.HelloController">
 
     <padding>
         <Insets bottom="20" left="20" right="20" top="20" />
