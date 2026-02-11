@@ -1,5 +1,6 @@
 package com.example.assetflow;
 
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
@@ -13,6 +14,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
+import javafx.scene.chart.PieChart;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HelloController {
     @FXML
@@ -27,6 +31,8 @@ public class HelloController {
     private TableColumn<Expense, Double> colAmount;
     @FXML
     private Label lblTotal;
+    @FXML
+    private PieChart categoryChart;
 
     private final ObservableList<Expense> expenseData = FXCollections.observableArrayList();
 
@@ -52,6 +58,7 @@ public class HelloController {
             if (selected != null) {
                 expenseData.remove(selected);
                 updateTotal();
+                updateChart();
                 saveData();
             }
         });
@@ -87,16 +94,18 @@ public class HelloController {
 
         TextField descriptionField = new TextField();
         descriptionField.setPromptText("Write your item name");
-        TextField categoryField = new TextField();
-        categoryField.setPromptText("Input your category");
+        ComboBox<String> categoryBox = new ComboBox<>();
+        categoryBox.setEditable(true);
+        categoryBox.setPromptText("Select or type category");
+        categoryBox.getItems().addAll("Food", "Transport", "Rent", "Salary", "Entertainment", "Shopping", "Others");
         TextField amountField = new TextField();
         amountField.setPromptText("Set your amount");
 
         grid.add(new Label("Description"), 0, 0);
         grid.add(descriptionField, 1, 0);
         grid.add(new Label("Category"), 0, 1);
-        grid.add(categoryField, 1, 1);
-        grid.add(new Label("amount"), 0, 2);
+        grid.add(categoryBox, 1, 1);
+        grid.add(new Label("Amount"), 0, 2);
         grid.add(amountField, 1, 2);
 
         dialog.getDialogPane().setContent(grid);
@@ -104,7 +113,7 @@ public class HelloController {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
                 String desc = descriptionField.getText();
-                String cat = categoryField.getText();
+                String cat = categoryBox.getEditor().getText();
                 double amt = Double.parseDouble(amountField.getText());
                 return new Expense(desc, amt, cat, LocalDate.now());
             }
@@ -115,6 +124,10 @@ public class HelloController {
             expenseData.add(expense);
             updateTotal();
         });
+
+        if (categoryChart.isVisible()) {
+            updateChart();
+        }
 
         saveData();
     }
@@ -174,5 +187,29 @@ public class HelloController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    protected void onToggleChart() {
+        boolean isShowing = !categoryChart.isVisible();
+        categoryChart.setVisible(isShowing);
+        categoryChart.setManaged(isShowing);
+        if (isShowing) {
+            updateChart();
+        }
+    }
+
+    private void updateChart() {
+        categoryChart.getData().clear();
+
+        Map<String, Double> categoryTotals = expenseData.stream()
+                .collect(Collectors.groupingBy(
+                        expense -> expense.categoryProperty().get(),
+                        Collectors.summingDouble(e -> e.amountProperty().get())
+                ));
+
+        categoryTotals.forEach((category, total) -> {
+            categoryChart.getData().add(new PieChart.Data(category, total));
+        });
     }
 }

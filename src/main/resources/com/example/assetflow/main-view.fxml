@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.chart.PieChart?>
 <VBox prefHeight="669.0" prefWidth="900.0" spacing="10" style="-fx-background-color: #f4f4f4;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.assetflow.HelloController">
 
     <padding>
@@ -32,15 +33,21 @@
         </VBox>
     </HBox>
 
-    <TableView fx:id="expenseTable" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="colDescription" prefWidth="300" text="Description" />
-            <TableColumn fx:id="colCategory" prefWidth="150" text="Category" />
-            <TableColumn fx:id="colAmount" prefWidth="100" text="Amount" />
-        </columns>
-        <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-        </columnResizePolicy>
-    </TableView>
+    <Button text="View Analytics" onAction="#onToggleChart" styleClass="btn-primary"/>
+
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+        <TableView fx:id="expenseTable" HBox.hgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colDescription" text="Description" />
+                <TableColumn fx:id="colCategory" text="Category" />
+                <TableColumn fx:id="colAmount" text="Amount" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+
+        <PieChart fx:id="categoryChart" managed="false" visible="false" title="Spending by Category" prefWidth="400"/>
+    </HBox>
 
 </VBox>

@@ -141,3 +141,55 @@
     -fx-text-fill: #95a5a6;
     -fx-font-italic: true;
 }
+
+.chart-pie-label {
+    -fx-fill: #2c3e50;
+    -fx-font-size: 12px;
+}
+
+.chart-title {
+    -fx-text-fill: #34495e;
+    -fx-font-weight: bold;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.analytics-button {
+    -fx-background-color: #4b6584;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+.analytics-button:hover {
+    -fx-background-color: #778ca3;
+    -fx-effect: dropshadow(three-pass-box, rgba(75, 101, 132, 0.2), 8, 0, 0, 0);
+}
+
+/*!* History Button (Refining the Blue) *!*/
+/*.btn-primary {*/
+/*    -fx-background-color: #45aaf2;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-background-radius: 6;*/
+/*    -fx-padding: 8 15;*/
+/*}*/
+
+/*.add-button {*/
+/*    -fx-background-color: #20bf6b;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-font-weight: bold;*/
+/*    -fx-background-radius: 6;*/
+/*}*/
+
+.table-row-cell:selected {
+    -fx-background-color: #d1d8e0;
+    -fx-background-insets: 0;
+    -fx-text-fill: #2d3436;
+}
