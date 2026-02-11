@@ -44,6 +44,19 @@ public class HelloController {
 //        expenseData.add(new Expense("Netflix Subscription", 15.99, "Entertainment", LocalDate.of(2025, 12, 28)));
 
         updateTotal();
+
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem deleteItem = new MenuItem("Delete Expense");
+        deleteItem.setOnAction(event -> {
+            Expense selected = expenseTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                expenseData.remove(selected);
+                updateTotal();
+                saveData();
+            }
+        });
+        contextMenu.getItems().add(deleteItem);
+        expenseTable.setContextMenu(contextMenu);
     }
 
     void updateTotal() {
