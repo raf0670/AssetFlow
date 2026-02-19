@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ProgressBar?>
 
 <?import javafx.scene.chart.PieChart?>
 <VBox prefHeight="669.0" prefWidth="900.0" spacing="10" style="-fx-background-color: #f4f4f4;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.assetflow.HelloController">
@@ -33,7 +34,17 @@
         </VBox>
     </HBox>
 
-    <Button text="View Analytics" onAction="#onToggleChart" styleClass="btn-primary"/>
+    <HBox alignment="CENTER" spacing="20">
+        <Button text="View Analytics" onAction="#onToggleChart" styleClass="btn-primary" prefWidth="150"/>
+        <Button text="Set Budget" onAction="#onSetBudgetClick" styleClass="analytics-button" prefWidth="150"/>
+    </HBox>
+
+    <VBox prefWidth="300" spacing="10" alignment="CENTER" styleClass="panel">
+        <Label text="Budget Progress" style="-fx-font-weight: bold;"/>
+        <ProgressBar fx:id="budgetProgress" prefWidth="400.0" progress="0.0"/>
+        <Label fx:id="lblBudgetStatus" text="Budget not set" style="-fx-font-size: 12px;"/>
+    </VBox>
+
 
     <HBox spacing="15" VBox.vgrow="ALWAYS">
         <TableView fx:id="expenseTable" HBox.hgrow="ALWAYS">

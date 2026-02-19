@@ -11,10 +11,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
 import javafx.scene.chart.PieChart;
+
+import javax.swing.*;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -37,17 +41,41 @@ public class HelloController {
     private final ObservableList<Expense> expenseData = FXCollections.observableArrayList();
 
     @FXML
+    private ProgressBar budgetProgress;
+    @FXML
+    private Label lblBudgetStatus;
+    private double monthlyBudget = 0;
+
+    public void setMonthlyBudget(double monthlyBudget) throws FileNotFoundException {
+        this.monthlyBudget = monthlyBudget;
+        updateTotal();
+        saveBudget();
+    }
+
+    @FXML
+    private void onSetBudgetClick() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("budget-view.fxml"));
+        Scene scene = new Scene(loader.load());
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+
+        BudgetController controller = loader.getController();
+        controller.setMainController(this);
+
+        Stage stage = new Stage();
+        stage.setTitle("Set Budget");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
     public void initialize() {
         loadData();
+        loadBudget();
         colDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
         colAmount.setCellValueFactory(cellData -> cellData.getValue().amountProperty().asObject());
 
         expenseTable.setItems(expenseData);
-
-//        expenseData.add(new Expense("Starbucks Coffee", 5.50, "Food", LocalDate.of(2026, 2, 5)));
-//        expenseData.add(new Expense("Groceries", 42.10, "Food", LocalDate.of(2026, 1, 29)));
-//        expenseData.add(new Expense("Netflix Subscription", 15.99, "Entertainment", LocalDate.of(2025, 12, 28)));
 
         updateTotal();
 
@@ -66,12 +94,52 @@ public class HelloController {
         expenseTable.setContextMenu(contextMenu);
     }
 
-    void updateTotal() {
-        double sum = 0;
-        for (Expense e : expenseData) {
-            sum += e.amountProperty().get();
+//    void updateTotal() {
+//        double sum = 0;
+//        for (Expense e : expenseData) {
+//            sum += e.amountProperty().get();
+//        }
+//        lblTotal.setText(String.format("%.2f", sum));
+//    }
+
+    private void saveBudget() throws FileNotFoundException {
+        try (java.io.PrintWriter out = new java.io.PrintWriter("budget.txt")) {
+            out.println(monthlyBudget);
+        } catch (Exception e) {
+
         }
-        lblTotal.setText(String.format("%.2f", sum));
+    }
+
+    private void loadBudget() {
+        java.io.File file = new java.io.File("budget.txt");
+        if (file.exists()) {
+            try (java.util.Scanner scanner = new java.util.Scanner(file)) {
+                if (scanner.hasNextDouble()) {
+                    this.monthlyBudget = scanner.nextDouble();
+                }
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
+    void updateTotal() {
+        double sum = expenseData.stream().mapToDouble(e -> e.amountProperty().get()).sum();
+        lblTotal.setText(String.format("$%.2f", sum));
+
+        if (monthlyBudget >= 0) {
+            double percentage = sum / monthlyBudget;
+            budgetProgress.setProgress(percentage);
+            lblBudgetStatus.setText(String.format("%.1f%% of $%s", percentage * 100, monthlyBudget));
+
+            if (percentage < 0.5) {
+                budgetProgress.setStyle("-fx-accent: #20bf6b;");
+            } else if (percentage < 0.8) {
+                budgetProgress.setStyle("-fx-accent: #f7b731;");
+            } else {
+                budgetProgress.setStyle("-fx-accent: #eb3b5a;");
+            }
+        }
     }
 
     @FXML
