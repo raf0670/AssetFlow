@@ -189,15 +189,37 @@ public class HelloController {
         });
 
         dialog.showAndWait().ifPresent(expense -> {
+            double currentSum = expenseData.stream().mapToDouble(e -> e.amountProperty().get()).sum();
+            double projectedTotal = currentSum + expense.amountProperty().get();
+            if (monthlyBudget > 0 && projectedTotal > monthlyBudget){
+                Alert a = new Alert(Alert.AlertType.CONFIRMATION);
+                a.setTitle("Budget Warning");
+                a.setHeaderText("Budget Limit Exceeded!");
+                a.setContentText("Adding this expense makes your total $" + String.format("%.2f", projectedTotal) +
+                        ", which is over your $" + monthlyBudget + " budget.\n\nDo you still want to proceed?");
+                a.getDialogPane().setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
+                a.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+                java.util.Optional<ButtonType> result = a.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.YES){
+                    expenseData.add(expense);
+                    updateTotal();
+                    if (categoryChart.isVisible()) {
+                        updateChart();
+                    }
+                    saveData();
+                }
+            }
+            else{
             expenseData.add(expense);
             updateTotal();
+            if (categoryChart.isVisible()) {
+                updateChart();
+            }
+            saveData();
+            }
         });
 
-        if (categoryChart.isVisible()) {
-            updateChart();
-        }
 
-        saveData();
     }
 
     @FXML
