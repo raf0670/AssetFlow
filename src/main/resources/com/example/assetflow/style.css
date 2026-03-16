@@ -207,3 +207,28 @@
 .progress-bar .bar {
     -fx-background-radius: 10;
 }
+
+.table-view .table-cell {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #ecf0f1;
+    -fx-cursor: hand;
+}
+
+.table-row-cell:focused .table-cell {
+    -fx-text-fill: #2c3e50;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #d1d8e0;
+}
+
+.chart-pie {
+    -fx-border-color: transparent;
+}
+
+.table-cell .circle {
+    -fx-effect: drop shadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 0);
+}

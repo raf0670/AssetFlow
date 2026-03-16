@@ -23,6 +23,24 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HelloController {
+    private final Map<String, String> categoryColors = Map.of(
+            "Food", "#26de81",        // Green
+            "Transport", "#45aaf2",   // Blue
+            "Shopping", "#eb3b5b",    // Red
+            "Bills", "#f7b731",       // Yellow
+            "Entertainment", "#a55eea" // Purple
+    );
+
+    private String getColorFor(String category) {
+        return categoryColors.getOrDefault(category, "#778ca3"); // Default grey
+    }
+
+    @FXML
+    private Button btnBack;
+    @FXML
+    private Label lblViewTitle;
+    private boolean isDashboardMode = true; // Tracks which screen we are on
+
     @FXML
     private Label welcomeText;
     @FXML
@@ -71,27 +89,89 @@ public class HelloController {
     public void initialize() {
         loadData();
         loadBudget();
+        // 1. Set up standard cell factories
         colDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
         colAmount.setCellValueFactory(cellData -> cellData.getValue().amountProperty().asObject());
 
-        expenseTable.setItems(expenseData);
+        // 2. Add the Double-Click Listener
+        expenseTable.setRowFactory(tv -> {
+            TableRow<Expense> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty()) && isDashboardMode) {
+                    Expense clickedRow = row.getItem();
+                    showCategoryDetails(clickedRow.categoryProperty().get());
+                }
+            });
+            return row;
+        });
 
+        categoryChart.setVisible(true);
+        categoryChart.setManaged(true);
+
+        showDashboard();
         updateTotal();
 
-        ContextMenu contextMenu = new ContextMenu();
-        MenuItem deleteItem = new MenuItem("Delete Expense");
-        deleteItem.setOnAction(event -> {
-            Expense selected = expenseTable.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                expenseData.remove(selected);
-                updateTotal();
-                updateChart();
-                saveData();
+        colCategory.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    // Create a small colored circle as an "icon"
+                    javafx.scene.shape.Circle icon = new javafx.scene.shape.Circle(6);
+                    icon.setFill(javafx.scene.paint.Color.web(getColorFor(item)));
+
+                    setGraphic(icon);
+                    setGraphicTextGap(10);
+                    setText(item);
+                    setStyle("-fx-font-weight: bold;");
+                }
             }
         });
-        contextMenu.getItems().add(deleteItem);
-        expenseTable.setContextMenu(contextMenu);
+    }
+
+    @FXML
+    private void showDashboard() {
+        isDashboardMode = true;
+        lblViewTitle.setText("Financial Dashboard");
+        btnBack.setVisible(false);
+        categoryChart.setVisible(true);
+        categoryChart.setManaged(true);
+
+        // Grouping logic: Create 1 "Fake" Expense per category
+        Map<String, Double> summaryMap = expenseData.stream()
+                .collect(Collectors.groupingBy(
+                        e -> e.categoryProperty().get(),
+                        Collectors.summingDouble(e -> e.amountProperty().get())
+                ));
+
+        ObservableList<Expense> summaryList = FXCollections.observableArrayList();
+        summaryMap.forEach((category, total) -> {
+            summaryList.add(new Expense("Double-click to view details", total, category, LocalDate.now()));
+        });
+
+        expenseTable.setItems(summaryList);
+        colDescription.setText("Action"); // Rename column for Dashboard
+        updateChart();
+    }
+
+    private void showCategoryDetails(String categoryName) {
+        isDashboardMode = false;
+        lblViewTitle.setText(categoryName + " Details");
+        btnBack.setVisible(true);
+
+        categoryChart.setVisible(false); // Hide chart in detailed view
+        categoryChart.setManaged(false);
+
+        // Filter real data for this category
+        ObservableList<Expense> filtered = expenseData.filtered(e ->
+                e.categoryProperty().get().equalsIgnoreCase(categoryName));
+
+        expenseTable.setItems(filtered);
+        colDescription.setText("Description"); // Restore column name
     }
 
 //    void updateTotal() {
@@ -105,7 +185,7 @@ public class HelloController {
     private void saveBudget() throws FileNotFoundException {
         try (java.io.PrintWriter out = new java.io.PrintWriter("budget.txt")) {
             out.println(monthlyBudget);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
@@ -117,7 +197,7 @@ public class HelloController {
                 if (scanner.hasNextDouble()) {
                     this.monthlyBudget = scanner.nextDouble();
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }
@@ -125,12 +205,12 @@ public class HelloController {
 
     void updateTotal() {
         double sum = expenseData.stream().mapToDouble(e -> e.amountProperty().get()).sum();
-        lblTotal.setText(String.format("$%.2f", sum));
+        lblTotal.setText(String.format("BDT %.2f", sum));
 
         if (monthlyBudget >= 0) {
             double percentage = sum / monthlyBudget;
             budgetProgress.setProgress(percentage);
-            lblBudgetStatus.setText(String.format("%.1f%% of $%s", percentage * 100, monthlyBudget));
+            lblBudgetStatus.setText(String.format("%.1f%% of BDT %s", percentage * 100, monthlyBudget));
 
             if (percentage < 0.5) {
                 budgetProgress.setStyle("-fx-accent: #20bf6b;");
@@ -195,8 +275,8 @@ public class HelloController {
                 Alert a = new Alert(Alert.AlertType.CONFIRMATION);
                 a.setTitle("Budget Warning");
                 a.setHeaderText("Budget Limit Exceeded!");
-                a.setContentText("Adding this expense makes your total $" + String.format("%.2f", projectedTotal) +
-                        ", which is over your $" + monthlyBudget + " budget.\n\nDo you still want to proceed?");
+                a.setContentText("Adding this expense makes your total BDT " + String.format("%.2f", projectedTotal) +
+                        ", which is over your BDT " + monthlyBudget + " budget.\n\nDo you still want to proceed?");
                 a.getDialogPane().setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
                 a.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
                 java.util.Optional<ButtonType> result = a.showAndWait();
@@ -299,7 +379,10 @@ public class HelloController {
                 ));
 
         categoryTotals.forEach((category, total) -> {
-            categoryChart.getData().add(new PieChart.Data(category, total));
+            PieChart.Data data = new PieChart.Data(category, total);
+            categoryChart.getData().add(data);
+
+            data.getNode().setStyle("-fx-pie-color: " + getColorFor(category) + ";");
         });
     }
 }
