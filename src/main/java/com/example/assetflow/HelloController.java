@@ -24,22 +24,22 @@ import java.util.stream.Collectors;
 
 public class HelloController {
     private final Map<String, String> categoryColors = Map.of(
-            "Food", "#26de81",        // Green
-            "Transport", "#45aaf2",   // Blue
-            "Shopping", "#eb3b5b",    // Red
-            "Bills", "#f7b731",       // Yellow
-            "Entertainment", "#a55eea" // Purple
+            "Food", "#26de81",
+            "Transport", "#45aaf2",
+            "Shopping", "#eb3b5b",
+            "Bills", "#f7b731",
+            "Entertainment", "#a55eea"
     );
 
     private String getColorFor(String category) {
-        return categoryColors.getOrDefault(category, "#778ca3"); // Default grey
+        return categoryColors.getOrDefault(category, "#778ca3");
     }
 
     @FXML
     private Button btnBack;
     @FXML
     private Label lblViewTitle;
-    private boolean isDashboardMode = true; // Tracks which screen we are on
+    private boolean isDashboardMode = true;
 
     @FXML
     private Label welcomeText;
@@ -89,12 +89,11 @@ public class HelloController {
     public void initialize() {
         loadData();
         loadBudget();
-        // 1. Set up standard cell factories
+
         colDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
         colCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty());
         colAmount.setCellValueFactory(cellData -> cellData.getValue().amountProperty().asObject());
 
-        // 2. Add the Double-Click Listener
         expenseTable.setRowFactory(tv -> {
             TableRow<Expense> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -120,7 +119,6 @@ public class HelloController {
                     setGraphic(null);
                     setText(null);
                 } else {
-                    // Create a small colored circle as an "icon"
                     javafx.scene.shape.Circle icon = new javafx.scene.shape.Circle(6);
                     icon.setFill(javafx.scene.paint.Color.web(getColorFor(item)));
 
@@ -141,7 +139,6 @@ public class HelloController {
         categoryChart.setVisible(true);
         categoryChart.setManaged(true);
 
-        // Grouping logic: Create 1 "Fake" Expense per category
         Map<String, Double> summaryMap = expenseData.stream()
                 .collect(Collectors.groupingBy(
                         e -> e.categoryProperty().get(),
@@ -154,7 +151,7 @@ public class HelloController {
         });
 
         expenseTable.setItems(summaryList);
-        colDescription.setText("Action"); // Rename column for Dashboard
+        colDescription.setText("Action");
         updateChart();
     }
 
@@ -163,15 +160,14 @@ public class HelloController {
         lblViewTitle.setText(categoryName + " Details");
         btnBack.setVisible(true);
 
-        categoryChart.setVisible(false); // Hide chart in detailed view
+        categoryChart.setVisible(false);
         categoryChart.setManaged(false);
 
-        // Filter real data for this category
         ObservableList<Expense> filtered = expenseData.filtered(e ->
                 e.categoryProperty().get().equalsIgnoreCase(categoryName));
 
         expenseTable.setItems(filtered);
-        colDescription.setText("Description"); // Restore column name
+        colDescription.setText("Description");
     }
 
 //    void updateTotal() {
