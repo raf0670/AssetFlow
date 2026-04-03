@@ -1,5 +1,6 @@
 package com.example.assetflow;
 
+import com.example.assetflow.network.ChatService;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
@@ -66,12 +67,48 @@ public class HelloController {
     private Label lblBudgetStatus;
     private double monthlyBudget = 0;
 
+    @FXML private TextArea chatArea;
+    @FXML private TextField chatField;
+    private ChatService chatService;
+
     public void setSessionUser(String username) {
         this.currentUser = username;
         this.lblViewTitle.setText("Dashboard for " + username);
-        // You can now change your save/load methods to use "expenses_" + username + ".csv"
+
         loadData();
         showDashboard();
+        updateTotal();
+        updateChart();
+
+        if (chatService == null) {
+            chatService = new ChatService();
+            chatService.connect("localhost", 12345, message -> {
+                javafx.application.Platform.runLater(() -> {
+                    if (chatArea != null) {
+                        chatArea.appendText(message + "\n");
+                    }
+                });
+            });
+        }
+    }
+
+    @FXML
+    private void onSendMessage() {
+        if (chatService == null) {
+            chatArea.appendText("System: Not connected to server.\n");
+            return;
+        }
+
+        String msg = chatField.getText();
+        if (msg != null && !msg.trim().isEmpty()) {
+            String fullMsg = currentUser + ": " + msg;
+
+            chatService.sendMessage(fullMsg);
+
+            chatArea.appendText(fullMsg + "\n");
+
+            chatField.clear();
+        }
     }
 
     public void setMonthlyBudget(double monthlyBudget) throws FileNotFoundException {
@@ -106,12 +143,38 @@ public class HelloController {
 
         expenseTable.setRowFactory(tv -> {
             TableRow<Expense> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && (!row.isEmpty()) && isDashboardMode) {
-                    Expense clickedRow = row.getItem();
-                    showCategoryDetails(clickedRow.categoryProperty().get());
+
+            // --- 1. RIGHT CLICK (DELETE) ---
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem deleteItem = new MenuItem("Delete Expense");
+            deleteItem.setOnAction(event -> {
+                Expense selected = row.getItem();
+                if (selected != null && !isDashboardMode) {
+                    expenseData.remove(selected);
+                    saveData();
+                    updateTotal();
+                    expenseTable.refresh();
                 }
             });
+            contextMenu.getItems().add(deleteItem);
+
+            // --- 2. DOUBLE CLICK (DRILL DOWN) ---
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Expense rowData = row.getItem();
+                    // If we are looking at the summary, go to details of that category
+                    if (isDashboardMode) {
+                        showDetails((String) rowData.getCategory());
+                    }
+                }
+            });
+
+            // Bind context menu
+            row.contextMenuProperty().bind(
+                    javafx.beans.binding.Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(contextMenu)
+            );
             return row;
         });
 
@@ -139,6 +202,23 @@ public class HelloController {
                 }
             }
         });
+    }
+
+    private void showDetails(String category) {
+        isDashboardMode = false; // We are now looking at specific items
+
+        // Filter the original expenseData list to show only items from this category
+        javafx.collections.transformation.FilteredList<Expense> filteredData =
+                new javafx.collections.transformation.FilteredList<>(expenseData,
+                        e -> e.getCategory().equals(category));
+
+        expenseTable.setItems(filteredData);
+
+        // UI Updates
+        lblViewTitle.setText("Details: " + category);
+        btnBack.setVisible(true);      // Show the back button
+        categoryChart.setVisible(false); // Hide chart to make room
+        categoryChart.setManaged(false);
     }
 
     @FXML

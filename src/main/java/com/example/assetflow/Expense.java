@@ -34,4 +34,8 @@ public class Expense {
     }
 
     public ObjectProperty<LocalDate> dateProperty() { return date; }
+
+    public Object getCategory() {
+        return category.get();
+    }
 }

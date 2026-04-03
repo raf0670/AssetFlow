@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 
 <?import javafx.scene.chart.PieChart?>
 <VBox prefHeight="669.0" prefWidth="900.0" spacing="10" style="-fx-background-color: #f4f4f4;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="com.example.assetflow.HelloController">
@@ -67,6 +69,17 @@
         </TableView>
 
         <PieChart fx:id="categoryChart" managed="false" visible="false" title="Spending by Category" prefWidth="400"/>
+        <VBox spacing="10" prefWidth="250" style="-fx-background-color: #f1f2f6; -fx-padding: 10;">
+            <Label text="Community Chat" style="-fx-font-weight: bold; -fx-text-fill: #2f3542;"/>
+
+            <TextArea fx:id="chatArea" VBox.vgrow="ALWAYS" editable="false" wrapText="true"
+                      style="-fx-font-size: 12px;"/>
+
+            <HBox spacing="5">
+                <TextField fx:id="chatField" HBox.hgrow="ALWAYS" promptText="Type a message..."/>
+                <Button text="Send" onAction="#onSendMessage" styleClass="add-button"/>
+            </HBox>
+        </VBox>
     </HBox>
 
 </VBox>
