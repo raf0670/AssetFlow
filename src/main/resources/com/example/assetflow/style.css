@@ -231,3 +231,10 @@
 .table-cell .circle {
     -fx-effect: drop shadow(three-pass-box, rgba(0,0,0,0.1), 3, 0, 0, 0);
 }
+
+.input-field {
+    -fx-padding: 10;
+    -fx-background-radius: 5;
+    -fx-border-color: #codded1;
+    -fx-border-radius: 5;
+}

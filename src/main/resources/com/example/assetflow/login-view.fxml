@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20" styleClass="main-container" prefWidth="400" prefHeight="500"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assetflow.LoginController">
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+
+    <Label text="AssetFlow" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <Label text="Login to manage your wealth" style="-fx-text-fill: #7f8c8d;"/>
+
+    <VBox spacing="10">
+        <TextField fx:id="usernameField" promptText="Username" styleClass="input-field"/>
+        <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field"/>
+    </VBox>
+
+    <Button text="Login" onAction="#handleLogin" maxWidth="Infinity" styleClass="add-button"/>
+    <Button text="Register New Account" onAction="#handleRegister" style="-fx-background-color: transparent; -fx-text-fill: #3498db;"/>
+
+    <Label fx:id="errorLabel" style="-fx-text-fill: #e74c3c;" />
+</VBox>

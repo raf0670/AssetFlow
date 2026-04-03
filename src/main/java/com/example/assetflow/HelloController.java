@@ -31,6 +31,8 @@ public class HelloController {
             "Entertainment", "#a55eea"
     );
 
+    private String currentUser;
+
     private String getColorFor(String category) {
         return categoryColors.getOrDefault(category, "#778ca3");
     }
@@ -63,6 +65,14 @@ public class HelloController {
     @FXML
     private Label lblBudgetStatus;
     private double monthlyBudget = 0;
+
+    public void setSessionUser(String username) {
+        this.currentUser = username;
+        this.lblViewTitle.setText("Dashboard for " + username);
+        // You can now change your save/load methods to use "expenses_" + username + ".csv"
+        loadData();
+        showDashboard();
+    }
 
     public void setMonthlyBudget(double monthlyBudget) throws FileNotFoundException {
         this.monthlyBudget = monthlyBudget;
@@ -295,6 +305,12 @@ public class HelloController {
             }
         });
 
+        saveData();    // Save to the user-specific CSV
+        updateTotal(); // Update the bottom total label
+
+        // ADD THIS LINE:
+        // This forces the app to re-group everything and refresh the pie chart
+        showDashboard();
 
     }
 
@@ -318,7 +334,9 @@ public class HelloController {
     }
 
     private void saveData() {
-        try (java.io.BufferedWriter w = new java.io.BufferedWriter(new java.io.FileWriter("expenses.csv"))) {
+        String fileName = (currentUser != null) ? "expenses_" + currentUser + ".csv" : "expenses.csv";
+
+        try (java.io.BufferedWriter w = new java.io.BufferedWriter(new java.io.FileWriter(fileName))) {
             for (Expense expense : expenseData) {
                 String line = String.format("%s,%s,%s,%.2f",
                         expense.dateProperty().get(),
@@ -334,8 +352,11 @@ public class HelloController {
     }
 
     private void loadData() {
-        java.io.File f = new java.io.File("expenses.csv");
+        String fileName = (currentUser != null) ? "expenses_" + currentUser + ".csv" : "expenses.csv";
+        java.io.File f = new java.io.File(fileName);
+
         if (!f.exists()) return;
+        expenseData.clear();
 
         try (java.io.BufferedReader r = new java.io.BufferedReader(new java.io.FileReader(f))) {
             String l;
