@@ -29,22 +29,11 @@ public class LoginController {
     }
 
     @FXML
-    private void handleRegister() {
-        String user = usernameField.getText();
-        String pass = passwordField.getText();
-
-        if (user.isEmpty() || pass.isEmpty()) {
-            errorLabel.setText("Fields cannot be empty!");
-            return;
-        }
-
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(USER_FILE, true))) {
-            bw.write(user + "," + pass);
-            bw.newLine();
-            errorLabel.setText("Registration successful! Please login.");
-        } catch (IOException e) {
-            errorLabel.setText("Error saving user.");
-        }
+    private void handleRegister() throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("register-view.fxml"));
+        Scene scene = new Scene(loader.load(), 900, 700);
+        Stage stage = (Stage) usernameField.getScene().getWindow();
+        stage.setScene(scene);
     }
 
     private boolean validateLogin(String username, String password) {
@@ -65,14 +54,14 @@ public class LoginController {
 
     private void switchToMain(String username) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
-        Scene scene = new Scene(loader.load(), 400, 500);
+        Scene scene = new Scene(loader.load(), 900, 700);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
 
-        // Pass the username to the main controller so we can load THEIR specific data
         HelloController controller = loader.getController();
         controller.setSessionUser(username);
 
         Stage stage = (Stage) usernameField.getScene().getWindow();
         stage.setScene(scene);
+        stage.centerOnScreen();
     }
 }
