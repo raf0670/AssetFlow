@@ -26,6 +26,7 @@
         <Region HBox.hgrow="ALWAYS" />
         <Button onAction="#onHistoryButtonClick" styleClass="btn, btn-primary" text="History" />
         <Button fx:id="btnAdd" onAction="#onAddButtonClick" styleClass="add-button" text="+ Add Expense" />
+        <Button text="Logout" onAction="#handleLogout" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;" />
     </HBox>
 
     <Separator />

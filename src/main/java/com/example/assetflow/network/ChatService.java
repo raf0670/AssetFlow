@@ -38,4 +38,13 @@ public class ChatService {
             out.println(msg);
         }
     }
+
+    public void close() {
+        try {
+            if (out != null) out.close();
+            if (in != null) in.close();
+            if (socket != null) socket.close();
+        } catch (IOException ignored) {
+        }
+    }
 }

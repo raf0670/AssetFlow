@@ -482,4 +482,23 @@ public class HelloController {
             data.getNode().setStyle("-fx-pie-color: " + getColorFor(category) + ";");
         });
     }
+
+    @FXML
+    private void handleLogout() throws IOException {
+        if (chatService != null) {
+            chatService.close();
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
+        Scene scene = new Scene(loader.load(), 900, 700);
+
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
+
+        // 4. Get the current Stage and swap the scene
+        Stage stage = (Stage) lblViewTitle.getScene().getWindow();
+        stage.setScene(scene);
+        stage.centerOnScreen();
+
+        System.out.println("User " + currentUser + " logged out.");
+    }
 }
