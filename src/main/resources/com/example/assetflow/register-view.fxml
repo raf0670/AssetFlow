@@ -19,13 +19,13 @@
 
     <Label fx:id="errorLabel" textFill="RED"/>
 
-    <TextField fx:id="fullNameField" promptText="Full Name" style="-fx-pref-height: 35px;"/>
-    <TextField fx:id="usernameField" promptText="Username" style="-fx-pref-height: 35px;"/>
-    <PasswordField fx:id="passwordField" promptText="Password" style="-fx-pref-height: 35px;"/>
-    <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" style="-fx-pref-height: 35px;"/>
+    <TextField fx:id="fullNameField" promptText="Full Name" style="-fx-pref-height: 35px;" maxWidth="300"/>
+    <TextField fx:id="usernameField" promptText="Username" style="-fx-pref-height: 35px;" maxWidth="300"/>
+    <PasswordField fx:id="passwordField" promptText="Password" style="-fx-pref-height: 35px;" maxWidth="300"/>
+    <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" style="-fx-pref-height: 35px;" maxWidth="300"/>
 
     <Button text="Register" onAction="#handleRegisterAction"
-            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 200px; -fx-pref-height: 40px; -fx-font-size: 14px; -fx-cursor: hand;"/>
+            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 200px; -fx-pref-height: 40px; -fx-font-size: 14px; -fx-cursor: hand;" maxWidth="200" maxHeight="10"/>
 
     <Button text="Back to Login" onAction="#backToLogin"
             style="-fx-background-color: transparent; -fx-text-fill: #2980b9; -fx-cursor: hand; -fx-underline: true;"/>

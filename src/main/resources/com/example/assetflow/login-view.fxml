@@ -12,12 +12,12 @@
     <Label text="Asset Flow" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
     <Label text="Login to manage your wealth" style="-fx-text-fill: #7f8c8d;"/>
 
-    <VBox spacing="10">
-        <TextField fx:id="usernameField" promptText="Username" styleClass="input-field"/>
-        <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field"/>
+    <VBox spacing="10" style="-fx-alignment: CENTER;">
+        <TextField fx:id="usernameField" promptText="Username" styleClass="input-field" maxWidth="300"/>
+        <PasswordField fx:id="passwordField" promptText="Password" styleClass="input-field" maxWidth="300"/>
     </VBox>
 
-    <Button text="Login" onAction="#handleLogin" maxWidth="Infinity" styleClass="add-button"/>
+    <Button text="Login" onAction="#handleLogin" maxWidth="200" styleClass="add-button"/>
     <Button text="Register New Account" onAction="#handleRegister" style="-fx-background-color: transparent; -fx-text-fill: #3498db; -fx-cursor: hand;"/>
 
     <Label fx:id="errorLabel" style="-fx-text-fill: #e74c3c;" />
