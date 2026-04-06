@@ -9,7 +9,7 @@
         <Insets top="40" right="40" bottom="40" left="40"/>
     </padding>
 
-    <Label text="AssetFlow" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <Label text="Asset Flow" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
     <Label text="Login to manage your wealth" style="-fx-text-fill: #7f8c8d;"/>
 
     <VBox spacing="10">

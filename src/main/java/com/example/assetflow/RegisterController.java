@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 public class RegisterController {
     @FXML private TextField fullNameField;
@@ -41,6 +42,7 @@ public class RegisterController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
             Scene scene = new Scene(loader.load(), 900, 700);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
 
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.setScene(scene);
@@ -60,6 +62,7 @@ public class RegisterController {
     private void backToLogin() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("login-view.fxml"));
         Scene scene = new Scene(loader.load(), 900, 700);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         Stage stage = (Stage) usernameField.getScene().getWindow();
         stage.setScene(scene);
     }

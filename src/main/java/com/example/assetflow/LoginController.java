@@ -32,6 +32,7 @@ public class LoginController {
     private void handleRegister() throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("register-view.fxml"));
         Scene scene = new Scene(loader.load(), 900, 700);
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
         Stage stage = (Stage) usernameField.getScene().getWindow();
         stage.setScene(scene);
     }
