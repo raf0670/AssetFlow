@@ -29,7 +29,6 @@ class ClientHandler implements Runnable {
         } catch (IOException e) {
             System.out.println("User disconnected.");
         } finally {
-            // Cleanup on disconnect
             try { socket.close(); } catch (IOException e) { }
         }
     }

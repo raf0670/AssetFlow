@@ -1,20 +1,17 @@
-/* Core Colors & Root */
 .root {
-    -fx-base: #1e1e2e; /* Deep dark background */
+    -fx-base: #1e1e2e;
     -fx-background: #181825;
     -fx-control-inner-background: #313244;
-    -fx-accent: #89b4fa; /* Soft blue accent */
+    -fx-accent: #89b4fa;
     -fx-default-button: #89b4fa;
 }
 
-/* Main Containers (Login/Register/Dashboard) */
 .main-container, .panel, VBox {
     -fx-background-color: #181825 !important;
 }
 
-/* Typography */
 .label {
-    -fx-text-fill: #cdd6f4 !important; /* Light text */
+    -fx-text-fill: #cdd6f4 !important;
 }
 
 .h2 {
@@ -23,7 +20,6 @@
     -fx-text-fill: #89b4fa;
 }
 
-/* Input Fields */
 .text-field, .password-field, .text-area {
     -fx-background-color: #313244;
     -fx-text-fill: #cdd6f4;
@@ -38,7 +34,6 @@
     -fx-border-color: #89b4fa;
 }
 
-/* Buttons */
 .button {
     -fx-background-color: #45475a;
     -fx-text-fill: #cdd6f4;
@@ -50,9 +45,8 @@
     -fx-background-color: #585b70;
 }
 
-/* Specific Button Classes from FXML */
 .add-button {
-    -fx-background-color: #a6e3a1; /* Success Green */
+    -fx-background-color: #a6e3a1;
     -fx-text-fill: #11111b;
     -fx-font-weight: bold;
 }
@@ -62,11 +56,10 @@
 }
 
 .analytics-button, .btn-clear {
-    -fx-background-color: #fab387; /* Peach/Orange */
+    -fx-background-color: #fab387;
     -fx-text-fill: #11111b;
 }
 
-/* TableView Styling */
 .table-view {
     -fx-background-color: transparent;
     -fx-border-color: #45475a;
@@ -94,12 +87,10 @@
     -fx-background-color: #585b70;
 }
 
-/* Chat & Community Section */
 .chat-area {
     -fx-font-family: "Consolas", monospace;
 }
 
-/* Progress Bar (Budget) */
 .progress-bar .track {
     -fx-background-color: #313244;
 }
@@ -108,7 +99,6 @@
     -fx-background-color: linear-gradient(to right, #f38ba8, #a6e3a1);
 }
 
-/* Charts */
 .chart-title {
     -fx-text-fill: #89b4fa;
 }

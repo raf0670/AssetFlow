@@ -21,7 +21,6 @@ public class LoginController {
         String pass = passwordField.getText();
 
         if (validateLogin(user, pass)) {
-            // Success! Load the main dashboard
             switchToMain(user);
         } else {
             errorLabel.setText("Invalid username or password!");

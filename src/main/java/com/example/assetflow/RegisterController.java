@@ -31,7 +31,6 @@ public class RegisterController {
             return;
         }
         if (!pass.equals(confirmPass)) {
-            //errorLabel.setStyle("-fx-text-fill: red;");
             errorLabel.setText("Passwords do not match!");
             return;
         }

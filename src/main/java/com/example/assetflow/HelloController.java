@@ -144,7 +144,6 @@ public class HelloController {
         expenseTable.setRowFactory(tv -> {
             TableRow<Expense> row = new TableRow<>();
 
-            // --- 1. RIGHT CLICK (DELETE) ---
             ContextMenu contextMenu = new ContextMenu();
             MenuItem deleteItem = new MenuItem("Delete Expense");
             deleteItem.setOnAction(event -> {
@@ -158,18 +157,15 @@ public class HelloController {
             });
             contextMenu.getItems().add(deleteItem);
 
-            // --- 2. DOUBLE CLICK (DRILL DOWN) ---
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
                     Expense rowData = row.getItem();
-                    // If we are looking at the summary, go to details of that category
                     if (isDashboardMode) {
                         showDetails((String) rowData.getCategory());
                     }
                 }
             });
 
-            // Bind context menu
             row.contextMenuProperty().bind(
                     javafx.beans.binding.Bindings.when(row.emptyProperty())
                             .then((ContextMenu) null)
@@ -205,19 +201,17 @@ public class HelloController {
     }
 
     private void showDetails(String category) {
-        isDashboardMode = false; // We are now looking at specific items
+        isDashboardMode = false;
 
-        // Filter the original expenseData list to show only items from this category
         javafx.collections.transformation.FilteredList<Expense> filteredData =
                 new javafx.collections.transformation.FilteredList<>(expenseData,
                         e -> e.getCategory().equals(category));
 
         expenseTable.setItems(filteredData);
 
-        // UI Updates
         lblViewTitle.setText("Details: " + category);
-        btnBack.setVisible(true);      // Show the back button
-        categoryChart.setVisible(false); // Hide chart to make room
+        btnBack.setVisible(true);
+        categoryChart.setVisible(false);
         categoryChart.setManaged(false);
     }
 
@@ -259,14 +253,6 @@ public class HelloController {
         expenseTable.setItems(filtered);
         colDescription.setText("Description");
     }
-
-//    void updateTotal() {
-//        double sum = 0;
-//        for (Expense e : expenseData) {
-//            sum += e.amountProperty().get();
-//        }
-//        lblTotal.setText(String.format("%.2f", sum));
-//    }
 
     private void saveBudget() throws FileNotFoundException {
         try (java.io.PrintWriter out = new java.io.PrintWriter("budget.txt")) {
@@ -385,13 +371,9 @@ public class HelloController {
             }
         });
 
-        saveData();    // Save to the user-specific CSV
-        updateTotal(); // Update the bottom total label
-
-        // ADD THIS LINE:
-        // This forces the app to re-group everything and refresh the pie chart
+        saveData();
+        updateTotal();
         showDashboard();
-
     }
 
     @FXML

@@ -14,7 +14,6 @@ public class ChatService {
     public void connect(String host, int port, Consumer<String> onMessageReceived) {
         this.onMessageReceived = onMessageReceived;
 
-        // Use a Thread to connect and listen so the UI doesn't hang
         new Thread(() -> {
             try {
                 socket = new Socket(host, port);
