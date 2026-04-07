@@ -1,7 +1,7 @@
-# 💰 AssetFlow: Real-Time Financial Management Suite
+# 💰 Asset Flow: Real-Time Financial Management Suite
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Java-21+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
+  <img src="https://img.shields.io/badge/Java-21.0.10-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" />
   <img src="https://img.shields.io/badge/JavaFX-21.0.6-2C3E50?style=for-the-badge&logo=java&logoColor=white" />
   <img src="https://img.shields.io/badge/Socket--Programming-TCP-blue?style=for-the-badge" />
   <img src="https://img.shields.io/badge/Architecture-GRADLE-success?style=for-the-badge" />
@@ -32,11 +32,11 @@ Built with a focus on **concurrency**, **data persistence**, and **UX design**, 
 
 ## 🛠️ Technical Deep Dive
 
-| Layer | Technology | Key Implementation |
-| :--- | :--- | :--- |
+| Layer | Technology    | Key Implementation |
+| :--- |:--------------| :--- |
 | **View** | JavaFX / FXML | Custom CSS, Constrained Resize Policies |
-| **Logic** | Java 21 | MVC Pattern, Filtered & Sorted Lists |
-| **Network** | Java Sockets | Multi-threaded Server, TCP Broadcast |
+| **Logic** | Java 21.0.10  | MVC Pattern, Filtered & Sorted Lists |
+| **Network** | Java Sockets  | Multi-threaded Server, TCP Broadcast |
 | **Storage** | Flat-file CSV | Buffered I/O for efficient R/W operations |
 
 ---
@@ -53,14 +53,13 @@ Built with a focus on **concurrency**, **data persistence**, and **UX design**, 
 ## 📥 Getting Started
 
 ### 1. Prerequisites
-- **Java Development Kit (JDK) 21+**
+- **Java Development Kit (JDK) 21.0.10**
 - **JavaFX SDK 21.0.6**
 
 ### 2. Network Setup (For Multi-Laptop Connectivity)
 1. Run `ChatServer.java` on the host machine.
 2. Find the host's IPv4 address via `ipconfig`.
 3. In `ChatService.java`, update the `host` parameter with the Server IP.
-4. Disable Firewall for port `12345`.
 
 ---
 
