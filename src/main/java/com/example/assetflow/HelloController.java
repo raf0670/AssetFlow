@@ -461,7 +461,7 @@ public class HelloController {
             PieChart.Data data = new PieChart.Data(category, total);
             categoryChart.getData().add(data);
 
-            data.getNode().setStyle("-fx-pie-color: " + getColorFor(category) + ";");
+//            data.getNode().setStyle("-fx-pie-color: " + getColorFor(category) + ";");
         });
     }
 

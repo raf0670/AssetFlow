@@ -96,7 +96,7 @@
 }
 
 .progress-bar .bar {
-    -fx-background-color: linear-gradient(to right, #f38ba8, #a6e3a1);
+    -fx-background-color: linear-gradient(to right, #a6e3a1, #f38ba8);
 }
 
 .chart-title {
