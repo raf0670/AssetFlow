@@ -15,7 +15,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 700);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("style.css")).toExternalForm());
-        stage.setTitle("Asset Flow - Secure Login");
+        stage.setTitle("Asset Flow: Real-Time Financial Management Suite");
         stage.setScene(scene);
         stage.show();
     }
