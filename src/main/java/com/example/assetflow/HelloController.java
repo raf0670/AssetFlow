@@ -107,22 +107,28 @@ public class HelloController {
     }
 
     private void updateBudgetUI(String category) {
-        double spent;
-        if (category == null) {
-            spent = calculateSpent(null);
-            lblBudgetStatus.setText(String.format("Spent: BDT %.2f / BDT %.2f", spent, monthlyBudget));
-        } else {
-            spent = expenseData.stream()
-                    .filter(e -> e.categoryProperty().get().equalsIgnoreCase(category))
-                    .mapToDouble(e -> e.amountProperty().get())
-                    .sum();
-            lblBudgetStatus.setText(String.format("%s Spent: BDT %.2f / BDT %.2f", category, spent, monthlyBudget));
-        }
+        double spent = calculateSpent(category); // Using the helper from the previous step
 
         if (monthlyBudget > 0) {
+            // Calculate the percentage
+            double percentage = (spent / monthlyBudget) * 100;
+
+            // Update the Progress Bar
             budgetProgress.setProgress(Math.min(spent / monthlyBudget, 1.0));
+
+            // Update the Label Text
+            if (category == null) {
+                // Dashboard Mode
+                lblBudgetStatus.setText(String.format("Spent: %.1f%% of total budget (BDT %.2f / %.2f)",
+                        percentage, spent, monthlyBudget));
+            } else {
+                // Category Mode
+                lblBudgetStatus.setText(String.format("%s: %.1f%% of total budget (BDT %.2f / %.2f)",
+                        category, percentage, spent, monthlyBudget));
+            }
         } else {
             budgetProgress.setProgress(0);
+            lblBudgetStatus.setText("Budget not set");
         }
     }
 
@@ -253,6 +259,7 @@ public class HelloController {
                 }
             }
         });
+        updateBudgetUI(null);
     }
 
     private void showDetails(String category) {
@@ -359,6 +366,7 @@ public class HelloController {
                 budgetProgress.setStyle("-fx-accent: #eb3b5a;");
             }
         }
+        updateBudgetUI(null);
     }
 
     @FXML
