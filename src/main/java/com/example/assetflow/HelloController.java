@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -71,6 +72,60 @@ public class HelloController {
     @FXML private TextField chatField;
     private ChatService chatService;
 
+    @FXML private VBox chatContainer;
+    @FXML private PieChart itemDetailChart;
+
+    private void updateItemDetailChart(String category) {
+        itemDetailChart.getData().clear();
+
+        ObservableList<Expense> filteredItems = expenseData.filtered(
+                e -> e.categoryProperty().get().equalsIgnoreCase(category)
+        );
+
+        Map<String, Double> itemTotals = filteredItems.stream()
+                .collect(Collectors.groupingBy(
+                        expense -> expense.descriptionProperty().get(),
+                        Collectors.summingDouble(e -> e.amountProperty().get())
+                ));
+
+        itemTotals.forEach((description, total) -> {
+            itemDetailChart.getData().add(new PieChart.Data(description, total));
+        });
+    }
+
+    private double calculateSpent(String category) {
+        if (category == null) {
+            return expenseData.stream()
+                    .mapToDouble(e -> e.amountProperty().get())
+                    .sum();
+        } else {
+            return expenseData.stream()
+                    .filter(e -> e.categoryProperty().get().equalsIgnoreCase(category))
+                    .mapToDouble(e -> e.amountProperty().get())
+                    .sum();
+        }
+    }
+
+    private void updateBudgetUI(String category) {
+        double spent;
+        if (category == null) {
+            spent = calculateSpent(null);
+            lblBudgetStatus.setText(String.format("Spent: BDT %.2f / BDT %.2f", spent, monthlyBudget));
+        } else {
+            spent = expenseData.stream()
+                    .filter(e -> e.categoryProperty().get().equalsIgnoreCase(category))
+                    .mapToDouble(e -> e.amountProperty().get())
+                    .sum();
+            lblBudgetStatus.setText(String.format("%s Spent: BDT %.2f / BDT %.2f", category, spent, monthlyBudget));
+        }
+
+        if (monthlyBudget > 0) {
+            budgetProgress.setProgress(Math.min(spent / monthlyBudget, 1.0));
+        } else {
+            budgetProgress.setProgress(0);
+        }
+    }
+
     public void setSessionUser(String username) {
         this.currentUser = username;
         this.lblViewTitle.setText("Dashboard for " + username);
@@ -82,7 +137,7 @@ public class HelloController {
 
         if (chatService == null) {
             chatService = new ChatService();
-            chatService.connect("localhost", 12345, message -> {
+            chatService.connect("192.168.255.175", 12345, message -> {
                 javafx.application.Platform.runLater(() -> {
                     if (chatArea != null) {
                         chatArea.appendText(message + "\n");
@@ -209,10 +264,16 @@ public class HelloController {
 
         expenseTable.setItems(filteredData);
 
+        chatContainer.setVisible(false);
+        chatContainer.setManaged(false);
+        itemDetailChart.setVisible(true);
+        itemDetailChart.setManaged(true);
+        updateItemDetailChart(category);
         lblViewTitle.setText("Details: " + category);
         btnBack.setVisible(true);
         categoryChart.setVisible(false);
         categoryChart.setManaged(false);
+        updateBudgetUI(category);
     }
 
     @FXML
@@ -237,6 +298,12 @@ public class HelloController {
         expenseTable.setItems(summaryList);
         colDescription.setText("Action");
         updateChart();
+        chatContainer.setVisible(true);
+        chatContainer.setManaged(true);
+        itemDetailChart.setVisible(false);
+        itemDetailChart.setManaged(false);
+        updateTotal();
+        updateBudgetUI(null);
     }
 
     private void showCategoryDetails(String categoryName) {
@@ -443,6 +510,8 @@ public class HelloController {
         boolean isShowing = !categoryChart.isVisible();
         categoryChart.setVisible(isShowing);
         categoryChart.setManaged(isShowing);
+        budgetProgress.setVisible(true);
+        budgetProgress.setManaged(true);
         if (isShowing) {
             updateChart();
         }

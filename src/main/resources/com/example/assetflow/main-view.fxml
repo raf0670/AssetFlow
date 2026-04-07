@@ -30,7 +30,7 @@
     </HBox>
 
     <Separator />
-
+<!--<VBox alignment="CENTER">-->
     <HBox alignment="CENTER" spacing="20">
         <VBox prefWidth="200" styleClass="panel">
             <Label styleClass="panel-title" text="Total Spent" />
@@ -43,12 +43,12 @@
         <Button text="Set Budget" onAction="#onSetBudgetClick" styleClass="analytics-button" prefWidth="150"/>
     </HBox>
 
-    <VBox prefWidth="300" spacing="10" alignment="CENTER" styleClass="panel">
+    <VBox prefWidth="300" alignment="CENTER" styleClass="panel">
         <Label text="Budget Progress" style="-fx-font-weight: bold;"/>
         <ProgressBar fx:id="budgetProgress" prefWidth="400.0" progress="0.0"/>
         <Label fx:id="lblBudgetStatus" text="Budget not set" style="-fx-font-size: 12px;"/>
     </VBox>
-
+<!--</VBox>-->
 
     <HBox spacing="15" VBox.vgrow="ALWAYS">
         <TableView fx:id="expenseTable" HBox.hgrow="ALWAYS">
@@ -69,17 +69,19 @@
             </placeholder>
         </TableView>
 
-        <PieChart fx:id="categoryChart" managed="false" visible="false" title="Spending by Category" prefWidth="400"/>
-        <VBox spacing="10" prefWidth="250" style="-fx-background-color: #f1f2f6; -fx-padding: 10;">
-            <Label text="Community Chat" style="-fx-font-weight: bold; -fx-text-fill: #2f3542;"/>
+        <VBox spacing="10" prefWidth="350">
+            <PieChart fx:id="categoryChart" managed="false" visible="false" title="Spending by Category" VBox.vgrow="ALWAYS"/>
 
-            <TextArea fx:id="chatArea" VBox.vgrow="ALWAYS" editable="false" wrapText="true"
-                      style="-fx-font-size: 12px;"/>
+            <PieChart fx:id="itemDetailChart" managed="false" visible="false" title="Item Breakdown" VBox.vgrow="ALWAYS"/>
 
-            <HBox spacing="5">
-                <TextField fx:id="chatField" HBox.hgrow="ALWAYS" promptText="Type a message..."/>
-                <Button text="Send" onAction="#onSendMessage" styleClass="add-button"/>
-            </HBox>
+            <VBox fx:id="chatContainer" spacing="10" VBox.vgrow="ALWAYS" style="-fx-background-color: #f1f2f6; -fx-padding: 10;">
+                <Label text="Community Chat" style="-fx-font-weight: bold; -fx-text-fill: #2f3542;"/>
+                <TextArea fx:id="chatArea" VBox.vgrow="ALWAYS" editable="false" wrapText="true" style="-fx-font-size: 12px;"/>
+                <HBox spacing="5">
+                    <TextField fx:id="chatField" HBox.hgrow="ALWAYS" promptText="Type a message..."/>
+                    <Button text="Send" onAction="#onSendMessage" styleClass="add-button"/>
+                </HBox>
+            </VBox>
         </VBox>
     </HBox>
 

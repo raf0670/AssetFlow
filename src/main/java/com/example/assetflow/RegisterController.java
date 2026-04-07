@@ -27,7 +27,6 @@ public class RegisterController {
         String pass = passwordField.getText();
         String confirmPass = confirmPasswordField.getText();
 
-        // 1. Basic Validation
         if (fullName.isEmpty() || user.isEmpty() || pass.isEmpty() || confirmPass.isEmpty()) {
             errorLabel.setText("All fields are required!");
             return;
@@ -37,13 +36,11 @@ public class RegisterController {
             return;
         }
 
-        // 2. Check for Duplicate Username (Optional but highly recommended)
         if (userExists(user)) {
             errorLabel.setText("Username already exists!");
             return;
         }
 
-        // 3. Save and Transition
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("users.csv", true))) {
             bw.write(user + "," + pass + "," + fullName);
             bw.newLine();
@@ -51,7 +48,6 @@ public class RegisterController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("main-view.fxml"));
             VBox root = loader.load();
 
-            // Pass session to controller
             HelloController controller = loader.getController();
             controller.setSessionUser(user);
 
