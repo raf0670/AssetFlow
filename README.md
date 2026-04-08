@@ -54,12 +54,14 @@ Built with a focus on **concurrency**, **data persistence**, and **UX design**, 
 
 ### 1. Prerequisites
 - **Java Development Kit (JDK) 21.0.10**
-- **JavaFX SDK 21.0.6**
+- **JavaFX SDK 21**
 
 ### 2. Network Setup (For Multi-Laptop Connectivity)
-1. Run `ChatServer.java` on the host machine.
-2. Find the host's IPv4 address via `ipconfig`.
-3. In `ChatService.java`, update the `host` parameter with the Server IP.
+1. Find the host's IPv4 address via `ipconfig`.
+2. In `HelloController.java`, update the `host` parameter with the Server IP.
+3. Disable Windows Firewall for port `12345` from all computers wanting to connect under the same router.
+4. Run `ChatServer.java` on the host machine with `IntelliJ` by Jet Brains.
+5. Then run `Launcher.java` from any laptop that wants to participate in the community chat.
 
 ---
 
